@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>inMotion - Read Faster</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="scripts.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="container">
+    <div class="text-container">
+        <h1>in<span id="motion-text">Motion &nbsp;</span><span style="font-size: 0.5rem; font-weight: 300; margin-left: -1.5rem;">&nbsp; by dris elamri</span></h1>
+        <p>Read faster with inMotion. Paste your text below or upload a file to get started.</p>
+    </div>
+    <div class="textarea-container">
+        <textarea id="input-text" placeholder="Paste text or upload a file..."></textarea>
+        <label for="file-input" class="textarea-button" id="file-input-label">
+            <?xml version="1.0" ?><svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M0 0h48v48H0z" fill="none"/><path d="M8 12H4v28c0 2.21 1.79 4 4 4h28v-4H8V12zm32-8H16c-2.21 0-4 1.79-4 4v24c0 2.21 1.79 4 4 4h24c2.21 0 4-1.79 4-4V8c0-2.21-1.79-4-4-4zm-2 18h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z"/></svg>
+          <input type="file" id="file-input" accept=".pdf, .txt" />
+        </label>
+        <button class="textarea-button" id="audio-toggle">
+            <?xml version="1.0" ?><svg id="volume-on" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5; display: block;"><path d="M6 18v12h8l10 10V8L14 18H6zm27 6c0-3.53-2.04-6.58-5-8.05v16.11c2.96-1.48 5-4.53 5-8.06zM28 6.46v4.13c5.78 1.72 10 7.07 10 13.41s-4.22 11.69-10 13.41v4.13c8.01-1.82 14-8.97 14-17.54S36.01 8.28 28 6.46z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
+            <?xml version="1.0" ?><svg id="volume-off" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5; display: none;"><path d="M33 24c0-3.53-2.04-6.58-5-8.05v4.42l4.91 4.91c.06-.42.09-.85.09-1.28zm5 0c0 1.88-.41 3.65-1.08 5.28l3.03 3.03C41.25 29.82 42 27 42 24c0-8.56-5.99-15.72-14-17.54v4.13c5.78 1.72 10 7.07 10 13.41zM8.55 6L6 8.55 15.45 18H6v12h8l10 10V26.55l8.51 8.51c-1.34 1.03-2.85 1.86-4.51 2.36v4.13c2.75-.63 5.26-1.89 7.37-3.62L39.45 42 42 39.45l-18-18L8.55 6zM24 8l-4.18 4.18L24 16.36V8z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
+        </button>
+      </div>
+    <label for="wpm">WPM: <span id="wpm-value">400</span></label>
+    <input type="range" id="wpm" min="50" max="950" step="25" value="250">
+    <div class="controls">
+      <button id="play"><?xml version="1.0" ?><svg height="20" viewBox="0 0 48 48" width="auto" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M-838-2232H562v3600H-838z" fill="none"/><path d="M16 10v28l22-14z"/><path d="M0 0h48v48H0z" fill="none"/></svg></button>
+      <button id="backward-button"><?xml version="1.0" ?><svg height="20" viewBox="0 0 48 48" width="auto" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M22 36V12L5 24l17 12zm1-12l17 12V12L23 24z"/><path d="M0 0h48v48H0z" fill="none"/></svg></button>
+      <button id="pause"><?xml version="1.0" ?><svg height="20" viewBox="0 0 48 48" width="auto" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M12 38h8V10h-8v28zm16-28v28h8V10h-8z"/><path d="M0 0h48v48H0z" fill="none"/></svg></button>
+      <button id="forward-button"><?xml version="1.0" ?><svg height="20" viewBox="0 0 48 48" width="auto" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M8 36l17-12L8 12v24zm18-24v24l17-12-17-12z"/><path d="M0 0h48v48H0z" fill="none"/></svg></button>
+      <button id="stop"><?xml version="1.0" ?><svg height="20" viewBox="0 0 48 48" width="auto" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M0 0h48v48h-48z" fill="none"/><path d="M20.17 31.17l2.83 2.83 10-10-10-10-2.83 2.83 5.17 5.17h-19.34v4h19.34l-5.17 5.17zm17.83-25.17h-28c-2.21 0-4 1.79-4 4v8h4v-8h28v28h-28v-8h-4v8c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4v-28c0-2.21-1.79-4-4-4z"/></svg></button>
+      <button id="settings-button"><?xml version="1.0" ?><svg height="16" viewBox="0 0 48 48" width="auto" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M0 0h48v48h-48z" fill="none"/><path d="M38.86 25.95c.08-.64.14-1.29.14-1.95s-.06-1.31-.14-1.95l4.23-3.31c.38-.3.49-.84.24-1.28l-4-6.93c-.25-.43-.77-.61-1.22-.43l-4.98 2.01c-1.03-.79-2.16-1.46-3.38-1.97l-.75-5.3c-.09-.47-.5-.84-1-.84h-8c-.5 0-.91.37-.99.84l-.75 5.3c-1.22.51-2.35 1.17-3.38 1.97l-4.98-2.01c-.45-.17-.97 0-1.22.43l-4 6.93c-.25.43-.14.97.24 1.28l4.22 3.31c-.08.64-.14 1.29-.14 1.95s.06 1.31.14 1.95l-4.22 3.31c-.38.3-.49.84-.24 1.28l4 6.93c.25.43.77.61 1.22.43l4.98-2.01c1.03.79 2.16 1.46 3.38 1.97l.75 5.3c.08.47.49.84.99.84h8c.5 0 .91-.37.99-.84l.75-5.3c1.22-.51 2.35-1.17 3.38-1.97l4.98 2.01c.45.17.97 0 1.22-.43l4-6.93c.25-.43.14-.97-.24-1.28l-4.22-3.31zm-14.86 5.05c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg></button>
+      <div class="settings-modal" id="settings-modal">
+        <div class="settings-content">
+          <label for="font-select">Font:</label>
+          <select id="font-select">
+            <option value="Roboto">Default</option>
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+          </select>
+          <br>
+          <label for="skip-duration">Skip duration (seconds):</label>
+          <input type="number" id="skip-duration" value="10" min="1" step="1" />
+          <br>
+            <label for="chunk-size" class="setting-label">Chunk size:</label>
+            <input type="number" id="chunk-size" class="setting-input" min="1" value="1">
+            <br>
+          <label for="bold-toggle">Bold:</label>
+          <input type="checkbox" id="bold-toggle" checked>
+          <br>
+          <label for="highlight-toggle">Highlight:</label>
+          <input type="checkbox" id="highlight-toggle">
+          <br>
+          <button id="close-settings"><?xml version="1.0" ?><svg height="20" viewBox="0 0 48 48" width="20" xmlns="http://www.w3.org/2000/svg" style="scale: 1.3; fill: #f5f5f5;"><path d="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z"/><path d="M0 0h48v48h-48z" fill="none"/></svg></button>
+        </div>
+      </div>
+      
+    </div>
+    <div class="word-display">
+      <span id="current-word"></span>
+    </div>
+  </div>
+
+  <script>
+    // add fast forward button didhjashjkdas
+    // be able to edit chunk size dasjkjd;audioEnabled
+    //save all things in setings to cookie
+    // eidt font size;
+    const inputText = document.getElementById('input-text');
+    const textContainer = document.querySelector('.text-container');
+    const textAreaContainer = document.querySelector('.textarea-container');
+    const wpmInput = document.querySelector('input');
+const wpm = document.getElementById('wpm');
+const wpmValue = document.getElementById('wpm-value');
+const playButton = document.getElementById('play');
+const pauseButton = document.getElementById('pause');
+const stopButton = document.getElementById('stop');
+const currentWord = document.getElementById('current-word');
+const wordDisplay = document.querySelector('.word-display');
+const fileInput = document.getElementById('file-input');
+const fileInputLabel = document.getElementById('file-input-label');
+const audioToggle = document.getElementById('audio-toggle');
+const volumeOn = document.getElementById('volume-on');
+const volumeOff = document.getElementById('volume-off');
+const backwardButton = document.getElementById("backward-button");
+const forwardButton = document.getElementById("forward-button");
+const skipDurationInput = document.getElementById("skip-duration");
+const settingsButton = document.getElementById('settings-button');
+const closeSettings = document.getElementById('close-settings');
+const settingsModal = document.getElementById('settings-modal');
+const fontSelect = document.getElementById('font-select');
+const highlightToggle = document.getElementById('highlight-toggle');
+const boldToggle = document.getElementById('bold-toggle');
+const chunkSizeInput = document.getElementById("chunk-size");
+const motionText = document.getElementById('motion-text');
+const background = document.querySelector('.background');
+const synth = window.speechSynthesis;
+
+fileInput.addEventListener('change', handleFileInput);
+audioToggle.addEventListener('click', handleAudioToggle);
+
+let words = [];
+let currentWordIndex = 0;
+let interval;
+let skipDuration = parseInt(skipDurationInput.value);
+let chunkSize = parseInt(chunkSizeInput.value);
+let isPlaying = false;
+let audioEnabled = false;
+
+window.addEventListener('beforeunload', () => {
+  localStorage.setItem('inputText', inputText.value);
+  localStorage.setItem('wpm', wpm.value);
+  localStorage.setItem('audioEnabled', audioEnabled);
+  localStorage.setItem('font', currentWord.style.fontFamily);
+localStorage.setItem('highlight', currentWord.style.backgroundColor);
+localStorage.setItem('bold', currentWord.style.fontWeight);
+});
+
+window.addEventListener('load', () => {
+    motionText.style.letterSpacing = '0rem';
+    textAreaContainer.style.opacity = '1';
+  const savedInputText = localStorage.getItem('inputText');
+  if (savedInputText) {
+    inputText.value = savedInputText;
+  }
+
+  const savedWpm = localStorage.getItem('wpm');
+  if (savedWpm) {
+    wpm.value = savedWpm;
+    wpmValue.textContent = savedWpm;
+  }
+
+  const savedAudioEnabled = localStorage.getItem('audioEnabled');
+  if (savedAudioEnabled) {
+    audioEnabled = (savedAudioEnabled === 'true');
+    if (audioEnabled) {
+        audioToggle.style.backgroundColor = 'transparent';
+        volumeOn.style.display = 'block';
+        volumeOff.style.display = 'none';
+  } else {
+        audioToggle.style.backgroundColor = 'rgba(245, 245, 245, 0.3)';
+        volumeOn.style.display = 'none';
+        volumeOff.style.display = 'block';
+  }
+}
+    const savedFont = localStorage.getItem('font');
+    if (savedFont) {
+    currentWord.style.fontFamily = savedFont;
+    }
+
+    const savedHighlight = localStorage.getItem('highlight');
+    if (savedHighlight) {
+    currentWord.style.backgroundColor = savedHighlight;
+    }
+
+    const savedBold = localStorage.getItem('bold');
+    if (savedBold) {
+    currentWord.style.fontWeight = savedBold;
+    }
+
+});
+
+
+wpm.addEventListener('input', () => {
+    wpmValue.textContent = wpm.value;
+  if (isPlaying) {
+    updateWpm();
+  }
+});
+
+function updateWordCounter() {
+  wpmValue.textContent = `${wpm.value} (${currentWordIndex + 1}/${words.length} words)`;
+}
+
+function updateWpm() {
+  clearInterval(interval);
+//   const wpmInterval = 60000 / parseInt(wpm.value);
+//   interval = setInterval(() => {
+//     currentWordIndex++;
+    const wpmInterval = (60000 / parseInt(wpm.value)) * chunkSize;
+    interval = setInterval(() => {
+    currentWordIndex += chunkSize;
+    if (currentWordIndex >= words.length) {
+      clearInterval(interval);
+      synth.cancel();
+      setTimeout(() => {
+        currentWord.style.opacity = '0';
+      }, wpmInterval);
+      currentWordIndex = 0;
+      wordDisplay.style.visibility = 'hidden';
+      inputText.style.opacity = '1';
+      textContainer.style.opacity = '1';
+      wpmInput.style.maxWidth = '600px';
+      textAreaContainer.style.maxWidth = '800px';
+      wpmValue.textContent = wpm.value;
+      background.classList.remove('blur-background');
+      stopAnimation()
+      isPlaying = false;
+    } else {
+      displayCurrentWord();
+    }
+  }, wpmInterval);
+}
+
+
+playButton.addEventListener('click', () => {
+  if (!isPlaying) {
+    words = inputText.value.split(/\s+/);
+    startAnimation();
+    isPlaying = true;
+    play();
+  }
+});
+
+pauseButton.addEventListener('click', () => {
+  if (isPlaying) {
+    clearInterval(interval);
+    synth.cancel();
+    isPlaying = false;
+  }
+});
+
+stopButton.addEventListener('click', () => {
+  clearInterval(interval);
+  synth.cancel();
+  currentWordIndex = 0;
+  wordDisplay.style.visibility = 'hidden';
+  currentWord.style.opacity = '0';
+  inputText.style.opacity = '1';
+  textContainer.style.opacity = '1';
+  wpmInput.style.maxWidth = '600px';
+  textAreaContainer.style.maxWidth = '800px';
+  wpmValue.textContent = wpm.value;
+  background.classList.remove('blur-background');
+  stopAnimation()
+  isPlaying = false;
+});
+
+function play() {
+    const wpmInterval = (60000 / parseInt(wpm.value)) * chunkSize;
+  //const wpmInterval = 60000 / parseInt(wpm.value);
+  displayCurrentWord();
+  interval = setInterval(() => {
+    //currentWordIndex++;
+    currentWordIndex += chunkSize;
+    if (currentWordIndex >= words.length) {
+      clearInterval(interval);
+      synth.cancel();
+      setTimeout(() => {
+        currentWord.style.opacity = '0';
+        wpmValue.textContent = wpm.value;
+      }, wpmInterval);
+      currentWordIndex = 0;
+      currentWord.style.opacity = '1';
+      wordDisplay.style.visibility = 'hidden';
+      inputText.style.opacity = '1';
+      textContainer.style.opacity = '1';
+      wpmInput.style.maxWidth = '600px';
+      textAreaContainer.style.maxWidth = '800px';
+      background.classList.remove('blur-background');
+      stopAnimation()
+      isPlaying = false;
+    } else {
+      displayCurrentWord();
+    }
+  }, wpmInterval);
+}
+
+function startAnimation() {
+    wordDisplay.style.visibility = 'visible';
+    currentWord.style.opacity = '1';
+    inputText.style.opacity = '0';
+    textContainer.style.opacity = '0';
+    wpmInput.style.maxWidth = '800px';
+    textAreaContainer.style.maxWidth = '630px';
+    background.classList.add('blur-background');
+    fileInputLabel.style.top = '160px';
+    fileInputLabel.style.opacity = '0';
+    audioToggle.style.borderRadius = '8px 8px 8px 8px'
+    audioToggle.style.top = '160px';
+    audioToggle.style.right = '15px';
+    backwardButton.style.position = 'relative';
+    backwardButton.style.opacity = '1';
+    backwardButton.style.marginLeft = '0rem';
+    forwardButton.style.position = 'relative';
+    forwardButton.style.opacity = '1';
+    forwardButton.style.marginRight = '0rem';
+
+}
+
+function stopAnimation() {
+    fileInputLabel.style.top = '15px';
+    fileInputLabel.style.opacity = '1';
+    audioToggle.style.borderRadius = '8px 4px 4px 8px'
+    audioToggle.style.top = '15px';
+    audioToggle.style.right = '55px';
+    backwardButton.style.position = 'fixed';
+    backwardButton.style.opacity = '0';
+    backwardButton.style.marginLeft = '1rem';
+    forwardButton.style.position = 'fixed';
+    forwardButton.style.opacity = '0';
+    forwardButton.style.marginRight = '1rem';
+}
+
+function displayCurrentWord() {
+    const chunk = words.slice(currentWordIndex, currentWordIndex + chunkSize).join(" ");
+  currentWord.textContent = chunk;
+  updateWordCounter();
+  speak(chunk);
+}
+
+function speak(word) {
+  if (synth.speaking) {
+    synth.cancel();
+  } else if (audioEnabled && !synth.speaking) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    synth.speak(utterance);
+  }
+}
+
+function handleAudioToggle() {
+  audioEnabled = !audioEnabled;
+  if (audioEnabled) {
+    audioToggle.style.backgroundColor = 'transparent';
+    volumeOn.style.display = 'block';
+    volumeOff.style.display = 'none';
+    speak(words[currentWordIndex]);
+  } else {
+    audioToggle.style.backgroundColor = 'rgba(245, 245, 245, 0.3)';
+    volumeOn.style.display = 'none';
+    volumeOff.style.display = 'block';
+    synth.cancel();
+  }
+}
+
+// function speak(word) {
+//   if (audioToggle.checked && !synth.speaking) {
+//     const utterance = new SpeechSynthesisUtterance(word);
+//     synth.speak(utterance);
+//   }
+// }
+
+async function handleFileInput(event) {
+  const file = event.target.files[0];
+  if (file.type === 'application/pdf') {
+    const pdf = await pdfjsLib.getDocument(URL.createObjectURL(file)).promise;
+    let text = '';
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const content = await page.getTextContent();
+      const strings = content.items.map((item) => item.str);
+      text += strings.join(' ');
+    }
+    inputText.value = text;
+  } else if (file.type === 'text/plain') {
+    const reader = new FileReader();
+    reader.onload = () => {
+      inputText.value = reader.result;
+    };
+    reader.readAsText(file);
+  }
+}
+
+skipDurationInput.addEventListener("change", (e) => {
+  skipDuration = parseInt(e.target.value);
+});
+
+backwardButton.addEventListener("click", () => {
+  if (isPlaying) {
+    currentWordIndex = Math.max((currentWordIndex - Math.round((skipDuration / 60) * wpm.value)), 0);
+    displayCurrentWord();
+  }
+});
+
+forwardButton.addEventListener("click", () => {
+  if (isPlaying) {
+    currentWordIndex = Math.min((currentWordIndex + Math.round((skipDuration / 60) * wpm.value)), words.length - 1);
+    displayCurrentWord();
+  }
+});
+
+settingsButton.addEventListener('click', () => {
+  settingsModal.style.display = 'block';
+  settingsModal.style.opacity = '1';
+});
+
+closeSettings.addEventListener('click', () => {
+  settingsModal.style.display = 'none';
+  settingsModal.style.opacity = '0';
+});
+
+fontSelect.addEventListener('change', () => {
+  currentWord.style.fontFamily = fontSelect.value;
+});
+
+highlightToggle.addEventListener('change', () => {
+  if (highlightToggle.checked) {
+    currentWord.style.backgroundColor = 'rgba(255, 252, 127, 0.7)';
+    currentWord.style.color = '#333';
+  } else {
+    currentWord.style.backgroundColor = 'transparent';
+    currentWord.style.color = '#f5f5f5';
+  }
+});
+
+boldToggle.addEventListener('change', () => {
+  if (boldToggle.checked) {
+    currentWord.style.fontWeight = 'bold';
+  } else {
+    currentWord.style.fontWeight = 'normal';
+  }
+});
+
+chunkSizeInput.addEventListener("change", (e) => {
+  chunkSize = parseInt(e.target.value);
+});
+
+
+
+
+  </script>
+</body>
+</html>
