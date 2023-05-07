@@ -105,9 +105,9 @@ p {
   #audio-toggle {
     top: 15px;
     right: 55px;
+    background-color: rgba(245, 245, 245, 0.3);
     border-radius: 8px 4px 4px 8px;
   }
-
 
 textarea {
   width: 100%;
