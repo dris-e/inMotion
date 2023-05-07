@@ -20,7 +20,7 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at top left, rgba(71, 71, 81, 1) 0%, rgba(34, 34, 34, 1) 100%);
+  background: radial-gradient(circle at top left, rgba(81, 81, 91, 1) 0%, rgba(34, 34, 34, 1) 100%);
   /* background: radial-gradient(circle at top left, rgba(214, 245, 210, 0.8) 0%, rgba(255, 238, 173, 0.8) 5%, rgba(244, 210, 245, 0.8) 15%,rgba(51, 51, 51, 1) 25%, rgba(34, 34, 34, 1) 100%); */
   background-size: 150%;
   filter: blur(0);
@@ -42,7 +42,7 @@ h1 {
   font-size: 3.5rem;
 }
 
-#motion-text {
+.motion-text {
     background-image: radial-gradient(circle at top left, rgba(214, 245, 210, 0.8) 5%, rgba(255, 238, 173, 0.8) 25%, rgba(244, 210, 245, 0.8) 50%);
     background-size: 200% 200%;
     -webkit-background-clip: text;
@@ -53,7 +53,7 @@ h1 {
   }
   
 
-#motion-text:hover {
+.motion-text:hover {
     letter-spacing: 0.5rem !important;
 }
 
@@ -171,7 +171,7 @@ input[type=range] {
   margin-bottom: 1rem;
 }
 
-button {
+button, input, select {
   font-size: 1rem;
   text-align: center;
   padding: 0.5rem 1rem;
@@ -180,6 +180,18 @@ button {
   color: #f5f5f5;
   border: solid #f5f5f5 1px;
   cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 #play {
@@ -194,7 +206,7 @@ button {
     border-radius: 4px 8px 8px 4px;
 }
 
-button:hover, .textarea-button:hover{
+button:hover, .textarea-button:hover, input:hover, select:hover {
   background-color: rgba(85, 85, 85, 0.8);
 }
 
@@ -218,15 +230,21 @@ button:hover, .textarea-button:hover{
     filter: blur(50px);
   }
 
-  #settings-button {
+  #settings-button, #info-button {
     position: fixed;
-    top: 20px;
     right: 20px;
-    border-radius: 8px;
     margin-left: 1rem;
   }
 
-  .settings-modal {
+  #settings-button {
+    top: 20px;
+  }
+
+  #info-button {
+    bottom: 10px;
+  }
+
+  .modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -234,12 +252,13 @@ button:hover, .textarea-button:hover{
     top: 0;
     width: 100%;
     height: 100%;
+    justify-content: center;
+    align-items: center;
     background-color: rgba(0, 0, 0, 0.4);
   }
   
-  .settings-content {
+  .modal-content {
     background-color: rgba(51, 51, 51, 0.95);
-    margin: 15% auto;
     padding: 20px;
     border: 1px solid #f5f5f5;
     width: 30%;
@@ -248,22 +267,41 @@ button:hover, .textarea-button:hover{
     border-radius: 12px;
   }
   
-  .settings-content button {
+  .modal-content button {
     margin-top: 1rem;
     z-index: 3;
     border-radius: 8px;
   }
 
-  .settings-content {
+  .modal-content {
     color: #f5f5f5;
+    max-height: 600px;
+    overflow-y: auto;
   }
   
-  .settings-content select,
-  .settings-content input[type="checkbox"] {
+  .modal-content select,
+  .modal-content input[type="checkbox"] {
     background-color: rgba(85, 85, 85, 0.8);
     font-family: 'Roboto', sans-serif !important;
     border-radius: 8px;
   }
+
+  .modal-content ul,
+.modal-content ol {
+  list-style-type: none;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-content li {
+  margin-bottom: 0.5rem;
+}
+
+.modal-content {
+  padding: 20px 40px;
+}
+
 
   #backward-button, #forward-button {
     position: fixed;
